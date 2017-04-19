@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Neighborhood Map</title>
+		<meta charset="utf-8">
+		<meta name="author" content="Brian Roper">
+		
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+	</head>
+	<body>
+		<div class="container">
+			<header class="row top">
+				<div>
+					<form class="col-md-4">
+						<h3 class="search_bar">
+							Search: 
+							<input data-bind="textInput: searchParam">
+						</h3>
+					</form>
+				</div>
+				<div>
+					<h1 class="col-md-8 map_title">Neighborhood Map: Dumbo</h1>
+				</div>
+			</header> <!-- /.row -->
+			<div class="row middle">
+				<div class="col-md-4" class="search_list">
+					<select multiple="multiple" width="50" data-bind="options: items"></select>
+				</div>
+				<div id="map" class="col-md-8"></div>
+			</div> <!-- /.row -->
+			<footer class="row bottom">
+				<div class="footer col-md-12">
+					<p>Built by Brian Roper</p>
+				</div>
+			</footer> <!-- /.row -->
+		</div>
+
+	    <script async defer
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAWYW-AOwQ_YeljAMH8ZhR-tv-MPAg-rI&callback=initMap">
+	    </script>
+
+	    <script src="js/jquery-3.2.0.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/knockout-3.4.2.js"></script>
+		<script src="js/main.js"></script>
+    </body>
+</html>
