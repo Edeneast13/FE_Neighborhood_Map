@@ -43,6 +43,22 @@ function initMap() {
 	    zoom: 13
 	});
 
+	var places = function(title, lat, long, keywords, street, city){
+		var marker;
+		this.title = ko.observable();
+		this.lat = ko.observable();
+		this.long = ko.observable();
+		this.keyWords = ko.observableArray();
+		this.street = ko.observable();
+		this.city = ko.observable();
+
+		marker = new google.maps.Marker({
+			position: new google.maps.LatLng(this.lat, this.long),
+			map: map,
+			title: this.title
+		});
+	}
+
 	var viewModel = function(){
 	this.items = ko.observableArray();
 		for(var i = 0; i < locations.places.length; i++){
@@ -54,6 +70,18 @@ function initMap() {
 	    	});
 		}
 		this.searchParam = ko.observable("");
+
+		this.filteredItems = [];
+
+		this.searchParam.subscribe(function(newValue){
+			filteredSearchParam = this.searchParam;
+			for(var j = 0; j < locations.places.length; j++){
+				if(locations.places[j].title.toLowerCase().indexOf(filteredSearchParam) != -1){
+					filteredItems.push(locations.places[j].title);
+					this.items = ko.observableArray(filteredItems);
+				}
+			}
+		});
 	};
 	ko.applyBindings(new viewModel());
 };
