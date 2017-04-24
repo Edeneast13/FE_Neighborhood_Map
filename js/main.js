@@ -26,6 +26,20 @@ var locations = [
 				"long": -73.9972716,
 				"street": "Dock Street", 
 				"city": "Brooklyn, NY"
+			},
+			{
+				"title": "Brooklyn Ice Cream Factory",
+				"lat": 40.703179,
+				"long": -73.9957897,
+				"street": "1 Water Street", 
+				"city": "Brooklyn, NY"
+			},
+			{
+				"title": "Atrium Dumbo Restuarant",
+				"lat": 40.7035667,
+				"long": -73.9924536,
+				"street": "15 Main Street", 
+				"city": "Brooklyn, NY"
 			}
 ];
 
@@ -57,6 +71,21 @@ var Place = function(location){
 		}
 		return true;
 	}, this);
+
+	var click = false;
+
+	this.marker.addListener('click', function(){
+		if(!click){
+			self.marker.setAnimation(google.maps.Animation.BOUNCE);
+			self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+			click = true;
+		}
+		else{
+			self.marker.setAnimation(null);
+			self.marker.setIcon(null);
+			click = false;
+		}
+	})
 };
 
 
@@ -69,7 +98,7 @@ function ViewModel(){
 	this.locationList = ko.observableArray([]);
 
 	map = new google.maps.Map(document.getElementById('map'), {
-		zoom: 13,
+		zoom: 14,
 		center: {lat: 40.7035, lng: -73.9939}
 	});
 
