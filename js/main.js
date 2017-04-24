@@ -1,10 +1,8 @@
-var locations = {
-	"places": [
+var locations = [
 			{
 				"title": "Brooklyn Bridge" ,
 				"lat": 40.7030827,
 				"long": -73.9951502,
-				"keyWords": ["bridge", "brooklyn", "historic", "monument"],
 				"street": "Brooklyn Bridge", 
 				"city": "New York, NY" 
 			},
@@ -12,7 +10,6 @@ var locations = {
 				"title": "Pier 1 Playground",
 				"lat": 40.7007388,
 				"long": -73.9947489,
-				"keyWords": ["park", "water", "hudson", "oudoors"],
 				"street": "102 Furman Street", 
 				"city": "Brooklyn, NY" 
 			},
@@ -20,7 +17,6 @@ var locations = {
 				"title": "Pier 2 Roller Rink",
 				"lat": 40.6994094,
 				"long": -73.9974218,
-				"keyWords": ["sports", "water", "hudson", "skating"],
 				"street": "150 Furman Street", 
 				"city": "Brooklyn, NY" 
 			},
@@ -28,66 +24,82 @@ var locations = {
 				"title": "Jane's Carousel",
 				"lat": 40.7013773,
 				"long": -73.9972716,
-				"keyWords": ["social", "outdoors", "game"],
 				"street": "Dock Street", 
 				"city": "Brooklyn, NY"
 			}
-		]
-};
+];
 
 var map;
 
-function initMap() {
-	map = new google.maps.Map(document.getElementById('map'), {
-	    center: {lat: 40.7035, lng: -73.9939},
-	    zoom: 13
+/* PLACE OBJECT */
+var Place = function(location){
+	var self = this;
+	this.title = location.title;
+	this.lat = location.lat;
+	this.long = location.long;
+	this.street = location.street;
+	this.city = location.city;
+
+	this.visible = ko.observable(true);
+
+	this.marker = new google.maps.Marker({
+		position: new google.maps.LatLng(location.lat, location.long),
+		map: map,
+		title: location.name
 	});
 
-	var places = function(title, lat, long, keywords, street, city){
-		var marker;
-		this.title = ko.observable();
-		this.lat = ko.observable();
-		this.long = ko.observable();
-		this.keyWords = ko.observableArray();
-		this.street = ko.observable();
-		this.city = ko.observable();
-
-		marker = new google.maps.Marker({
-			position: new google.maps.LatLng(this.lat, this.long),
-			map: map,
-			title: this.title
-		});
-	}
-
-	var viewModel = function(){
-	this.items = ko.observableArray();
-		for(var i = 0; i < locations.places.length; i++){
-			this.items.push(locations.places[i].title);
-			var marker = new google.maps.Marker({
-	    	position: new google.maps.LatLng(locations.places[i].lat, locations.places[i].long),
-	    	map: map,
-	    	title:"Hello World!"
-	    	});
+	this.showMarker = ko.computed(function(){
+		if(this.visible()){
+			this.marker.setMap(map);
 		}
-		this.searchParam = ko.observable("");
-
-		this.filteredItems = [];
-
-		this.searchParam.subscribe(function(newValue){
-			filteredSearchParam = this.searchParam;
-			for(var j = 0; j < locations.places.length; j++){
-				if(locations.places[j].title.toLowerCase().indexOf(filteredSearchParam) != -1){
-					filteredItems.push(locations.places[j].title);
-					this.items = ko.observableArray(filteredItems);
-				}
-			}
-		});
-	};
-	ko.applyBindings(new viewModel());
+		else{
+			this.marker.setMap(null);
+		}
+		return true;
+	}, this);
 };
 
 
+/* VIEW MODEL*/
+function ViewModel(){
+	var self = this;
 
+	this.searchParam = ko.observable("");
+
+	this.locationList = ko.observableArray([]);
+
+	map = new google.maps.Map(document.getElementById('map'), {
+		zoom: 13,
+		center: {lat: 40.7035, lng: -73.9939}
+	});
+
+	locations.forEach(function(item){
+		self.locationList.push(new Place(item))
+	});
+
+	this.searchQuery = ko.computed(function(){
+		var searchFilter = self.searchParam().toLowerCase();
+		if(!searchFilter){
+			self.locationList().forEach(function(item){
+				item.visible(true);
+			});
+			return self.locationList();
+		}
+		else{
+			return ko.utils.arrayFilter(self.locationList(), function(item){
+				var string = item.title.toLowerCase();
+				var result = (string.search(searchFilter) >= 0);
+				item.visible(result);
+				return result;
+			});
+		}
+	}, self);
+} // end view model
+
+//call a new view model and apply it using ko
+function initialize(){
+	ko.applyBindings(new ViewModel());
+}
 
 
 

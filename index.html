@@ -15,7 +15,7 @@
 					<form class="col-md-4">
 						<h3 class="search_bar">
 							Search: 
-							<input data-bind="textInput: searchParam">
+							<input data-bind="textInput: searchParam, valueUpdate: 'afterkeydown'">
 						</h3>
 					</form>
 				</div>
@@ -25,7 +25,9 @@
 			</header> <!-- /.row -->
 			<div class="row middle">
 				<div class="col-md-4" class="search_list">
-					<select multiple="multiple" width="50" data-bind="options: items"></select>
+					<ul data-bind="foreach: searchQuery">
+						<li data-bind="text: title"></li>
+					</ul>
 				</div>
 				<div id="map" class="col-md-8"></div>
 			</div> <!-- /.row -->
@@ -37,7 +39,7 @@
 		</div>
 
 	    <script async defer
-			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAWYW-AOwQ_YeljAMH8ZhR-tv-MPAg-rI&callback=initMap">
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAWYW-AOwQ_YeljAMH8ZhR-tv-MPAg-rI&callback=initialize">
 	    </script>
 
 	    <script src="js/jquery-3.2.0.min.js"></script>
