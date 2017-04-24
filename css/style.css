@@ -1,15 +1,60 @@
 
-html, body {
+html, body{
     height: 80vh;
     margin: 0;
     padding: 0;
-  }
+    background: #BDBDBD;
+}
 
-  #map {
+#map{
   	height: 80vh;
- }
+}
 
- .search_list{
- 	height: 100vh;
- 	width: 100vh;
- }
+.map_title{
+	font-family: 'Roboto', sans-serif;
+	text-align: right;
+	font-weight: 100;
+}
+
+.footer{
+	text-align: center;
+	padding: 10px;
+	color: white;
+}
+
+.search_list{
+	padding-top: 10px;
+	padding-left: 30px;
+	padding-right: 30px;
+	padding-bottom: 10px;
+	font-family: 'Roboto', sans-serif;
+	font-size: 20px;
+	font-weight: 300;
+	color: white;
+}
+
+.search_bar{
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
+}
+
+.top{
+}
+
+.middle{
+	background: #03A9F4;
+	padding: 10px;
+}
+
+.bottom{
+	background: #BDBDBD;
+}
+
+.dark-primary-color    { background: #303F9F; }
+.default-primary-color { background: #3F51B5; }
+.light-primary-color   { background: #C5CAE9; }
+.text-primary-color    { color: #FFFFFF; }
+.accent-color          { background: #9E9E9E; }
+.primary-text-color    { color: #212121; }
+.secondary-text-color  { color: #757575; }
+.divider-color         { border-color: #BDBDBD; }
