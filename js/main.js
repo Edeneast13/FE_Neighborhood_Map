@@ -78,6 +78,7 @@ var Place = function(location){
 		if(!click){
 			self.marker.setAnimation(google.maps.Animation.BOUNCE);
 			self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+			self.showInfo();
 			click = true;
 		}
 		else{
@@ -85,9 +86,40 @@ var Place = function(location){
 			self.marker.setIcon(null);
 			click = false;
 		}
-	})
-};
+	});
 
+	this.infoWindow = new google.maps.InfoWindow({
+		maxWidth: 200
+	});
+
+	var placesRequest = {
+		location: map.getCenter(),
+		radius: '500',
+		query: location.title
+	};
+
+	var service = new google.maps.places.PlacesService(map);
+	service.textSearch(placesRequest, placesCallback);
+
+	var placeId;
+
+	function placesCallback(results, status){
+		if(status == google.maps.places.PlacesServiceStatus.OK){
+			this.placeId = results[0].place_Id;
+			this.website = results[0].website;
+		}
+	};
+
+	this.info = ko.computed(function(){
+		return '<div>' + '<h3>' + self.website + '</h3>' + '</div>'
+	});
+
+	this.showInfo = function(){
+		map.setCenter(this.marker.getPosition());
+		this.infoWindow.setContent(this.info());
+		this.infoWindow.open(map, self.marker);
+	};
+};
 
 /* VIEW MODEL*/
 function ViewModel(){
