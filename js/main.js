@@ -83,6 +83,8 @@ var Place = function(location){
 
 	this.marker.addListener('click', function(){
 		if(!click){
+			$('#instatag').empty();
+			$('#instafeed').empty();
 			self.marker.setAnimation(google.maps.Animation.BOUNCE);
 			self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
 			self.tagFeed(self.tag);
@@ -98,10 +100,6 @@ var Place = function(location){
 		}
 	});
 
-	this.infoWindow = new google.maps.InfoWindow({
-		maxWidth: 200
-	});
-
 	var instaId = "71ae4a45b8674b438519df470f6b3c38";
 	var instaToken = "601545510.ba4c844.92f529b80405478590b9206bd84e5497";
 
@@ -111,37 +109,9 @@ var Place = function(location){
 			tagName: tag,
 			accessToken: instaToken,
 			sortBy: 'most-recent',
-			limit: '20'
+			limit: '18'
 		});
 		feed.run();
-	};
-
-	var placesRequest = {
-		location: map.getCenter(),
-		radius: '500',
-		query: location.title
-	};
-
-	var service = new google.maps.places.PlacesService(map);
-	service.textSearch(placesRequest, placesCallback);
-
-	var placeId;
-
-	function placesCallback(results, status){
-		if(status == google.maps.places.PlacesServiceStatus.OK){
-			this.placeId = results[0].place_Id;
-			this.website = results[0].website;
-		}
-	};
-
-	this.info = ko.computed(function(){
-		return '<div>' + '<h3>' + self.website + '</h3>' + '</div>'
-	});
-
-	this.showInfo = function(){
-		map.setCenter(this.marker.getPosition());
-		this.infoWindow.setContent(this.info());
-		this.infoWindow.open(map, self.marker);
 	};
 };
 
