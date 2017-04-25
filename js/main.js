@@ -86,11 +86,14 @@ var Place = function(location){
 			self.marker.setAnimation(google.maps.Animation.BOUNCE);
 			self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
 			self.tagFeed(self.tag);
+			$('#instatag').append('#'+self.tag);
 			click = true;
 		}
 		else{
 			self.marker.setAnimation(null);
 			self.marker.setIcon(null);
+			$('#instatag').empty();
+			$('#instafeed').empty();
 			click = false;
 		}
 	});

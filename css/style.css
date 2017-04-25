@@ -47,6 +47,11 @@ html, body{
 	padding: 10px;
 }
 
+.feed{
+	background: #FFFFFF;
+	padding: 10px;
+}
+
 .bottom{
 	background: #BDBDBD;
 }
