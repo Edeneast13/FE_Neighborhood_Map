@@ -87,6 +87,10 @@ var Place = function(location){
 			$('#instafeed').empty();
 			self.marker.setAnimation(google.maps.Animation.BOUNCE);
 			self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+			setTimeout(function(){
+				self.marker.setAnimation(null);
+				self.marker.setIcon(null);
+			}, 2000);
 			self.tagFeed(self.tag);
 			$('#instatag').append('#'+self.tag);
 			click = true;
@@ -100,16 +104,18 @@ var Place = function(location){
 		}
 	});
 
+	//client id and token for instagram api
 	var instaId = "71ae4a45b8674b438519df470f6b3c38";
 	var instaToken = "601545510.ba4c844.92f529b80405478590b9206bd84e5497";
 
+	//creates a new instafeed object 
 	this.tagFeed = function(tag){
 		var feed = new Instafeed({
 			get: 'tagged',
 			tagName: tag,
 			accessToken: instaToken,
 			sortBy: 'most-recent',
-			limit: '18'
+			limit: '21'
 		});
 		feed.run();
 	};
