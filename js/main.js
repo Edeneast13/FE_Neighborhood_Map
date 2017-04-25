@@ -4,42 +4,48 @@ var locations = [
 				"lat": 40.7030827,
 				"long": -73.9951502,
 				"street": "Brooklyn Bridge", 
-				"city": "New York, NY" 
+				"city": "New York, NY", 
+				"tag": "brooklynbridge"
 			},
 			{
 				"title": "Pier 1 Playground",
 				"lat": 40.7007388,
 				"long": -73.9947489,
 				"street": "102 Furman Street", 
-				"city": "Brooklyn, NY" 
+				"city": "Brooklyn, NY",
+				"tag": "pier1playground" 
 			},
 			{
 				"title": "Pier 2 Roller Rink",
 				"lat": 40.6994094,
 				"long": -73.9974218,
 				"street": "150 Furman Street", 
-				"city": "Brooklyn, NY" 
+				"city": "Brooklyn, NY",
+				"tag": "pier2rollerrink" 
 			},
 			{
 				"title": "Jane's Carousel",
 				"lat": 40.7013773,
 				"long": -73.9972716,
 				"street": "Dock Street", 
-				"city": "Brooklyn, NY"
+				"city": "Brooklyn, NY",
+				"tag": "janescarousel"
 			},
 			{
 				"title": "Brooklyn Ice Cream Factory",
 				"lat": 40.703179,
 				"long": -73.9957897,
 				"street": "1 Water Street", 
-				"city": "Brooklyn, NY"
+				"city": "Brooklyn, NY",
+				"tag": "brooklynicecreamfactory"
 			},
 			{
 				"title": "Atrium Dumbo Restuarant",
 				"lat": 40.7035667,
 				"long": -73.9924536,
 				"street": "15 Main Street", 
-				"city": "Brooklyn, NY"
+				"city": "Brooklyn, NY",
+				"tag": "atriumdumbo"
 			}
 ];
 
@@ -53,13 +59,14 @@ var Place = function(location){
 	this.long = location.long;
 	this.street = location.street;
 	this.city = location.city;
+	this.tag = location.tag;
 
 	this.visible = ko.observable(true);
 
 	this.marker = new google.maps.Marker({
 		position: new google.maps.LatLng(location.lat, location.long),
 		map: map,
-		title: location.name
+		title: location.title
 	});
 
 	this.showMarker = ko.computed(function(){
@@ -78,7 +85,7 @@ var Place = function(location){
 		if(!click){
 			self.marker.setAnimation(google.maps.Animation.BOUNCE);
 			self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
-			self.showInfo();
+			self.tagFeed(self.tag);
 			click = true;
 		}
 		else{
@@ -91,6 +98,20 @@ var Place = function(location){
 	this.infoWindow = new google.maps.InfoWindow({
 		maxWidth: 200
 	});
+
+	var instaId = "71ae4a45b8674b438519df470f6b3c38";
+	var instaToken = "601545510.ba4c844.92f529b80405478590b9206bd84e5497";
+
+	this.tagFeed = function(tag){
+		var feed = new Instafeed({
+			get: 'tagged',
+			tagName: tag,
+			accessToken: instaToken,
+			sortBy: 'most-recent',
+			limit: '20'
+		});
+		feed.run();
+	};
 
 	var placesRequest = {
 		location: map.getCenter(),
