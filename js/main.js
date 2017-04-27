@@ -87,6 +87,7 @@ var Place = function(location){
 		if(!click){
 			$('#instatag').empty();
 			$('#instafeed').empty();
+			$('#wikitest').empty();
 			self.marker.setAnimation(google.maps.Animation.BOUNCE);
 			self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
 			setTimeout(function(){
@@ -103,6 +104,7 @@ var Place = function(location){
 			self.marker.setIcon(null);
 			$('#instatag').empty();
 			$('#instafeed').empty();
+			$('#wikitest').empty();
 			click = false;
 		}
 	});
@@ -131,7 +133,7 @@ function wikiRequest(title){
 	function request(){
 		$.ajax({
 			url: 'http://en.wikipedia.org/w/api.php',
-			data: { action: 'query', list: 'search', srsearch: title, format: "json"},
+			data: { action: 'opensearch', search: title, format: "json"},
 			dataType: 'jsonp',
 			success: processResult,
 			error: processError
@@ -139,10 +141,8 @@ function wikiRequest(title){
 	}
 
 	function processResult(result){
-		for(var i = 0; i < result.query.search.length; i++){
-			$("#wikitest").append(result.query.search[i].title);
-			console.log("Sucess");
-		}
+		var response = result[2];
+		$('#wikitest').append("Wikipedia: " + response);
 	}
 
 	function processError(){
