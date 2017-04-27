@@ -1,3 +1,5 @@
+"use strict"
+
 var locations = [
 			{
 				"title": "Brooklyn Bridge" ,
@@ -93,6 +95,7 @@ var Place = function(location){
 			}, 2000);
 			self.tagFeed(self.tag);
 			$('#instatag').append('#'+self.tag);
+			wikiRequest(self.title);
 			click = true;
 		}
 		else{
@@ -120,6 +123,34 @@ var Place = function(location){
 		feed.run();
 	};
 };
+
+/* WIKIPEDIA */
+function wikiRequest(title){
+	console.log("Wiki called");
+
+	function request(){
+		$.ajax({
+			url: 'http://en.wikipedia.org/w/api.php',
+			data: { action: 'query', list: 'search', srsearch: title, format: "json"},
+			dataType: 'jsonp',
+			success: processResult,
+			error: processError
+		});
+	}
+
+	function processResult(result){
+		for(var i = 0; i < result.query.search.length; i++){
+			$("#wikitest").append(result.query.search[i].title);
+			console.log("Sucess");
+		}
+	}
+
+	function processError(){
+		console.log("Error");
+	}
+
+	request();
+}//end wiki request
 
 /* VIEW MODEL*/
 function ViewModel(){
