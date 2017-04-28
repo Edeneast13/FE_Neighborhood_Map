@@ -39,12 +39,14 @@ html, body{
 	font-weight: 300;
 }
 
-.top{
-}
-
 .middle{
 	background: #03A9F4;
 	padding: 10px;
+}
+
+#wiki{
+	padding: 10px;
+	font-family: 'Roboto', sans-serif;
 }
 
 .feed{

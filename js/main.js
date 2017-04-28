@@ -1,5 +1,6 @@
 "use strict"
 
+/* Location Data */
 var locations = [
 			{
 				"title": "Brooklyn Bridge" ,
@@ -10,20 +11,20 @@ var locations = [
 				"tag": "brooklynbridge"
 			},
 			{
-				"title": "Pier 1 Playground",
-				"lat": 40.7007388,
-				"long": -73.9947489,
-				"street": "102 Furman Street", 
+				"title": "Brooklyn Navy Yard",
+				"lat": 40.7034886,
+				"long": -73.9805604,
+				"street": "63 Flushing Avenue", 
 				"city": "Brooklyn, NY",
-				"tag": "pier1playground" 
+				"tag": "brooklynnavalyard" 
 			},
 			{
-				"title": "Pier 2 Roller Rink",
-				"lat": 40.6994094,
-				"long": -73.9974218,
-				"street": "150 Furman Street", 
+				"title": "Kings County Distillery",
+				"lat": 40.6994894,
+				"long": -73.9808352,
+				"street": "1299 Sands Street", 
 				"city": "Brooklyn, NY",
-				"tag": "pier2rollerrink" 
+				"tag": "kingscountrydistillery" 
 			},
 			{
 				"title": "Jane's Carousel",
@@ -42,12 +43,12 @@ var locations = [
 				"tag": "brooklynicecreamfactory"
 			},
 			{
-				"title": "Atrium Dumbo Restuarant",
-				"lat": 40.7035667,
-				"long": -73.9924536,
-				"street": "15 Main Street", 
+				"title": "Manhatten Bridge",
+				"lat": 40.707222,
+				"long": -73.9909,
+				"street": "Manhatten Bridge", 
 				"city": "Brooklyn, NY",
-				"tag": "atriumdumbo"
+				"tag": "manhattenbridge"
 			}
 ];
 
@@ -87,7 +88,7 @@ var Place = function(location){
 		if(!click){
 			$('#instatag').empty();
 			$('#instafeed').empty();
-			$('#wikitest').empty();
+			$('#wiki').empty();
 			self.marker.setAnimation(google.maps.Animation.BOUNCE);
 			self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
 			setTimeout(function(){
@@ -104,7 +105,7 @@ var Place = function(location){
 			self.marker.setIcon(null);
 			$('#instatag').empty();
 			$('#instafeed').empty();
-			$('#wikitest').empty();
+			$('#wiki').empty();
 			click = false;
 		}
 	});
@@ -130,6 +131,7 @@ var Place = function(location){
 function wikiRequest(title){
 	console.log("Wiki called");
 
+	//asynchronous call to wikipedia
 	function request(){
 		$.ajax({
 			url: 'http://en.wikipedia.org/w/api.php',
@@ -142,7 +144,7 @@ function wikiRequest(title){
 
 	function processResult(result){
 		var response = result[2];
-		$('#wikitest').append("Wikipedia: " + response);
+		$('#wiki').append("Wikipedia: " + response);
 	}
 
 	function processError(){
