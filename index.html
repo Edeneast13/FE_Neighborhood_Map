@@ -4,8 +4,10 @@
 		<title>Neighborhood Map: Dumbo</title>
 		<meta charset="utf-8">
 		<meta name="author" content="Brian Roper">
+		<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
 		
-		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	</head>
@@ -23,7 +25,7 @@
 						<input data-bind="textInput: searchParam, valueUpdate: 'afterkeydown'">
 					</h3>
 					<ul class="search_list" data-bind="foreach: searchQuery">
-						<li data-bind="text: title"></li>
+						<li data-bind="text: title, click: $parent.titleClick"></li>
 					</ul>
 				</div>
 				<div id="map" class="col-md-8"></div>
@@ -50,14 +52,14 @@
 			</footer> <!-- /.row -->
 		</div>
 
-	    <script async defer
-			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAWYW-AOwQ_YeljAMH8ZhR-tv-MPAg-rI&callback=initialize">
-	    </script>
-
-		<script type="text/javascript" src="js/instafeed.min.js"></script>
+		<script src="js/instafeed.min.js"></script>
 	    <script src="js/jquery-3.2.0.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/knockout-3.4.2.js"></script>
 		<script src="js/main.js"></script>
+
+		<script async defer
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAWYW-AOwQ_YeljAMH8ZhR-tv-MPAg-rI&callback=initialize">
+	    </script>
     </body>
 </html>

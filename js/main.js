@@ -85,29 +85,7 @@ var Place = function(location){
 	var click = false;
 
 	this.marker.addListener('click', function(){
-		if(!click){
-			$('#instatag').empty();
-			$('#instafeed').empty();
-			$('#wiki').empty();
-			self.marker.setAnimation(google.maps.Animation.BOUNCE);
-			self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
-			setTimeout(function(){
-				self.marker.setAnimation(null);
-				self.marker.setIcon(null);
-			}, 2000);
-			self.tagFeed(self.tag);
-			$('#instatag').append('#'+self.tag);
-			wikiRequest(self.title);
-			click = true;
-		}
-		else{
-			self.marker.setAnimation(null);
-			self.marker.setIcon(null);
-			$('#instatag').empty();
-			$('#instafeed').empty();
-			$('#wiki').empty();
-			click = false;
-		}
+		clickResponse();
 	});
 
 	//client id and token for instagram api
@@ -125,6 +103,32 @@ var Place = function(location){
 		});
 		feed.run();
 	};
+
+	function clickResponse(){
+		if(!click){
+			$('#instatag').empty();
+			$('#instafeed').empty();
+			$('#wiki').empty();
+			self.marker.setAnimation(google.maps.Animation.BOUNCE);
+			self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+			setTimeout(function(){
+				self.marker.setAnimation(null);
+				self.marker.setIcon(null);
+			}, 1400);
+			self.tagFeed(self.tag);
+			$('#instatag').append('#'+self.tag);
+			wikiRequest(self.title);
+			click = true;
+		}
+		else{
+			self.marker.setAnimation(null);
+			self.marker.setIcon(null);
+			$('#instatag').empty();
+			$('#instafeed').empty();
+			$('#wiki').empty();
+			click = false;
+		}
+	}
 };
 
 /* WIKIPEDIA */
@@ -157,6 +161,7 @@ function wikiRequest(title){
 /* VIEW MODEL*/
 function ViewModel(){
 	var self = this;
+	var markers = []; 
 
 	this.searchParam = ko.observable("");
 
@@ -171,11 +176,20 @@ function ViewModel(){
 		self.locationList.push(new Place(item))
 	});
 
+	self.titleClick = function(){
+		console.log("Clicked");
+		var context = ko.contextFor(event.target);
+		google.maps.event.trigger(markers[context.$index()], 'click');
+	}
+
 	this.searchQuery = ko.computed(function(){
 		var searchFilter = self.searchParam().toLowerCase();
+		var marker;
 		if(!searchFilter){
 			self.locationList().forEach(function(item){
 				item.visible(true);
+				marker = item.marker;
+				markers.push(marker);
 			});
 			return self.locationList();
 		}
@@ -184,6 +198,8 @@ function ViewModel(){
 				var string = item.title.toLowerCase();
 				var result = (string.search(searchFilter) >= 0);
 				item.visible(result);
+				marker = item.marker;
+				markers.push(marker);
 				return result;
 			});
 		}
