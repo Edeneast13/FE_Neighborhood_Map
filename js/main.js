@@ -99,7 +99,11 @@ var Place = function(location){
 			tagName: tag,
 			accessToken: instaToken,
 			sortBy: 'most-recent',
-			limit: '21'
+			limit: '21',
+			error: function(){
+				console.log("Instagram error");
+				$('#instafeed').append("There seems to be something wrong with Instagram right now. ");
+			}
 		});
 		feed.run();
 	};
@@ -153,6 +157,7 @@ function wikiRequest(title){
 
 	function processError(){
 		console.log("Error");
+		$('#wiki').append("Wikipedia: " + " There seems to be an issue with Wikipedia right now.");
 	}
 
 	request();
