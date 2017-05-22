@@ -33,7 +33,8 @@
 			<header>
 				<div class="row summary">
 				<div class="col-md-12">
-					<div id="wiki"></div>
+					
+					<div id="wiki" data-bind="text: wikiInfo">
 				</div>
 			</div> 
 			</header> <!-- /.row -->
@@ -42,6 +43,7 @@
 					<div class="col-md-12">
 						<div id="instatag"></div>
 						<div id="instafeed"></div>
+						<div id="instaerror" data-bind="text: instaErrorText"></div>
 					</div>
 				</div>
 			</header>
@@ -59,7 +61,7 @@
 		<script src="js/main.js"></script>
 
 		<script async defer
-			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAWYW-AOwQ_YeljAMH8ZhR-tv-MPAg-rI&callback=initialize">
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAWYW-AOwQ_YeljAMH8ZhR-tv-MPAg-rI&callback=initialize" onerror="mapErrorHandling()">
 	    </script>
     </body>
 </html>

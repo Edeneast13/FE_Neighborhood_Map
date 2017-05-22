@@ -102,7 +102,7 @@ var Place = function(location){
 			limit: '21',
 			error: function(){
 				console.log("Instagram error");
-				$('#instafeed').append("There seems to be something wrong with Instagram right now. ");
+				var instaErrorText = ko.observable("There seems to be something wrong with Instagram right now. ");
 			}
 		});
 		feed.run();
@@ -121,7 +121,8 @@ var Place = function(location){
 			}, 1400);
 			self.tagFeed(self.tag);
 			$('#instatag').append('#'+self.tag);
-			wikiRequest(self.title);
+			var wiki = wikiRequest(self.title);
+			console.log(wiki);
 			click = true;
 		}
 		else{
@@ -152,7 +153,8 @@ function wikiRequest(title){
 
 	function processResult(result){
 		var response = result[2];
-		$('#wiki').append("Wikipedia: " + response);
+		var wikiResponse = "Wikipedia: " + response;
+		$('#wiki').append(wikiResponse);
 	}
 
 	function processError(){
@@ -172,6 +174,8 @@ function ViewModel(){
 
 	this.locationList = ko.observableArray([]);
 
+	this.wikiInfo = ko.observable("");
+
 	map = new google.maps.Map(document.getElementById('map'), {
 		zoom: 14,
 		center: {lat: 40.7035, lng: -73.9939}
@@ -181,10 +185,9 @@ function ViewModel(){
 		self.locationList.push(new Place(item))
 	});
 
-	self.titleClick = function(){
-		console.log("Clicked");
+	self.titleClick = function(data){
 		var context = ko.contextFor(event.target);
-		google.maps.event.trigger(markers[context.$index()], 'click');
+		google.maps.event.trigger(data.marker, 'click');
 	}
 
 	this.searchQuery = ko.computed(function(){
@@ -210,6 +213,10 @@ function ViewModel(){
 		}
 	}, self);
 } // end view model
+
+function mapErrorHandling(){
+	alert("Something is wrong with Google Maps. Make sure you have an active network connection and reload the page.")
+}
 
 //call a new view model and apply it using ko
 function initialize(){

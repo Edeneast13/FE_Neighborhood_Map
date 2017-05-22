@@ -1,29 +1,30 @@
 
-html, body{
+html, 
+body {
     height: 80vh;
     margin: 0;
     padding: 0;
-    background: #BDBDBD;
+    background: #bdbdbd;
 }
 
-#map{
+#map {
   	height: 80vh;
 }
 
-.map_title{
+.map_title {
 	font-family: 'Roboto', sans-serif;
 	text-align: right;
 	font-weight: 100;
 	padding-top: 10px;
 }
 
-.footer{
+.footer {
 	text-align: center;
 	padding: 10px;
 	color: white;
 }
 
-.search_list{
+.search_list {
 	padding-top: 10px;
 	padding-left: 30px;
 	padding-right: 30px;
@@ -34,29 +35,29 @@ html, body{
 	color: white;
 }
 
-.search_bar{
+.search_bar {
 	font-family: 'Roboto', sans-serif;
 	font-weight: 300;
 }
 
-.middle{
+.middle {
 	background: #03A9F4;
 	padding: 10px;
 }
 
-#wiki{
+#wiki {
 	padding: 10px;
 	font-family: 'Roboto', sans-serif;
 }
 
-.feed{
+.feed {
 	background: #FFFFFF;
 	padding-bottom: 10px;
 	padding-left: 20px;
 	padding-top: 10px;
 }
 
-.bottom{
+.bottom {
 	background: #BDBDBD;
 }
 
