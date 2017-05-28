@@ -1,9 +1,9 @@
-"use strict"
+'use strict'
 
 /* Location Data */
 var locations = [
 			{
-				"title": "Brooklyn Bridge" ,
+                "title": "Brooklyn Bridge" ,
 				"lat": 40.7030827,
 				"long": -73.9951502,
 				"street": "Brooklyn Bridge", 
@@ -65,6 +65,8 @@ var Place = function(location){
 	this.tag = location.tag;
 
 	this.visible = ko.observable(true);
+    
+    var wiki;
 
 	this.marker = new google.maps.Marker({
 		position: new google.maps.LatLng(location.lat, location.long),
@@ -85,7 +87,7 @@ var Place = function(location){
 	var click = false;
 
 	this.marker.addListener('click', function(){
-		clickResponse();
+        markerClick();
 	});
 
 	//client id and token for instagram api
@@ -107,63 +109,49 @@ var Place = function(location){
 		});
 		feed.run();
 	};
-
-	function clickResponse(){
-		if(!click){
-			$('#instatag').empty();
-			$('#instafeed').empty();
-			$('#wiki').empty();
-			self.marker.setAnimation(google.maps.Animation.BOUNCE);
-			self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
-			setTimeout(function(){
+    
+    function markerClick(){
+        console.log("Marker Clicked");
+        self.marker.setAnimation(google.maps.Animation.BOUNCE);
+        self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+        setTimeout(function(){
 				self.marker.setAnimation(null);
 				self.marker.setIcon(null);
 			}, 1400);
-			self.tagFeed(self.tag);
-			$('#instatag').append('#'+self.tag);
-			var wiki = wikiRequest(self.title);
-			console.log(wiki);
-			click = true;
-		}
-		else{
-			self.marker.setAnimation(null);
-			self.marker.setIcon(null);
-			$('#instatag').empty();
-			$('#instafeed').empty();
-			$('#wiki').empty();
-			click = false;
-		}
-	}
+        self.tagFeed(self.tag);
+    }
+    
+    /* WIKIPEDIA */
+    function wikiRequest(title){
+        console.log("Wiki called");
+
+        //asynchronous call to wikipedia
+        function request(){
+            $.ajax({
+                url: 'http://en.wikipedia.org/w/api.php',
+                data: { action: 'opensearch', search: title, format: "json"},
+                dataType: 'jsonp',
+                success: processResult,
+                error: processError
+            });
+        }
+
+        function processResult(result){
+            var response = result[2];
+            wiki = "Wikipedia: " + response;
+            console.log(wiki);
+        }
+
+        function processError(){
+            console.log("Error");
+            wiki = "Wikipedia: " + " There seems to be an issue with Wikipedia right now.";
+        }
+
+        request();
+    }//end wiki request
+    
+    wikiRequest(self.title);
 };
-
-/* WIKIPEDIA */
-function wikiRequest(title){
-	console.log("Wiki called");
-
-	//asynchronous call to wikipedia
-	function request(){
-		$.ajax({
-			url: 'http://en.wikipedia.org/w/api.php',
-			data: { action: 'opensearch', search: title, format: "json"},
-			dataType: 'jsonp',
-			success: processResult,
-			error: processError
-		});
-	}
-
-	function processResult(result){
-		var response = result[2];
-		var wikiResponse = "Wikipedia: " + response;
-		$('#wiki').append(wikiResponse);
-	}
-
-	function processError(){
-		console.log("Error");
-		$('#wiki').append("Wikipedia: " + " There seems to be an issue with Wikipedia right now.");
-	}
-
-	request();
-}//end wiki request
 
 /* VIEW MODEL*/
 function ViewModel(){
@@ -188,6 +176,7 @@ function ViewModel(){
 	self.titleClick = function(data){
 		var context = ko.contextFor(event.target);
 		google.maps.event.trigger(data.marker, 'click');
+        console.log(data.wiki);
 	}
 
 	this.searchQuery = ko.computed(function(){
