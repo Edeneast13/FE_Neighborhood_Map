@@ -66,7 +66,7 @@ var Place = function(location){
 
 	this.visible = ko.observable(true);
     
-    var wiki;
+    this.wiki = "";
 
 	this.marker = new google.maps.Marker({
 		position: new google.maps.LatLng(location.lat, location.long),
@@ -111,7 +111,6 @@ var Place = function(location){
 	};
     
     function markerClick(){
-        console.log("Marker Clicked");
         self.marker.setAnimation(google.maps.Animation.BOUNCE);
         self.marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
         setTimeout(function(){
@@ -138,13 +137,12 @@ var Place = function(location){
 
         function processResult(result){
             var response = result[2];
-            wiki = "Wikipedia: " + response;
-            console.log(wiki);
+            self.wiki = "Wikipedia: " + response;
         }
 
         function processError(){
             console.log("Error");
-            wiki = "Wikipedia: " + " There seems to be an issue with Wikipedia right now.";
+            self.wiki = "Wikipedia: " + " There seems to be an issue with Wikipedia right now.";
         }
 
         request();
@@ -162,7 +160,7 @@ function ViewModel(){
 
 	this.locationList = ko.observableArray([]);
 
-	this.wikiInfo = ko.observable("");
+	this.wikiInfo = ko.observable();
 
 	map = new google.maps.Map(document.getElementById('map'), {
 		zoom: 14,
@@ -177,6 +175,8 @@ function ViewModel(){
 		var context = ko.contextFor(event.target);
 		google.maps.event.trigger(data.marker, 'click');
         console.log(data.wiki);
+        self.wikiInfo(data.wiki);
+        console.log("WIKI INFO: " + self.wikiInfo);
 	}
 
 	this.searchQuery = ko.computed(function(){
@@ -211,13 +211,3 @@ function mapErrorHandling(){
 function initialize(){
 	ko.applyBindings(new ViewModel());
 }
-
-
-
-
-
-
-
-
-
-
