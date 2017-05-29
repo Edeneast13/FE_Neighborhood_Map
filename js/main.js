@@ -67,6 +67,7 @@ var Place = function(location){
 	this.visible = ko.observable(true);
     
     this.wiki = "";
+    this.instaErrorText = "";
 
 	this.marker = new google.maps.Marker({
 		position: new google.maps.LatLng(location.lat, location.long),
@@ -104,7 +105,7 @@ var Place = function(location){
 			limit: '21',
 			error: function(){
 				console.log("Instagram error");
-				var instaErrorText = ko.observable("There seems to be something wrong with Instagram right now. ");
+				self.instaErrorText = "There seems to be something wrong with Instagram right now.";
 			}
 		});
 		feed.run();
@@ -161,6 +162,8 @@ function ViewModel(){
 	this.locationList = ko.observableArray([]);
 
 	this.wikiInfo = ko.observable();
+    
+    this.instaErrorText = ko.observable();
 
 	map = new google.maps.Map(document.getElementById('map'), {
 		zoom: 14,
@@ -174,9 +177,8 @@ function ViewModel(){
 	self.titleClick = function(data){
 		var context = ko.contextFor(event.target);
 		google.maps.event.trigger(data.marker, 'click');
-        console.log(data.wiki);
         self.wikiInfo(data.wiki);
-        console.log("WIKI INFO: " + self.wikiInfo);
+        self.instaErrorText(data.instaErrorText);
 	}
 
 	this.searchQuery = ko.computed(function(){
