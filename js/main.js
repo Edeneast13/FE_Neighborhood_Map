@@ -100,6 +100,7 @@ var Place = function(location){
 
 	//creates a new instafeed object 
 	this.tagFeed = function(tag){
+        vm.createInstaDiv();
 		var feed = new Instafeed({
 			get: 'tagged',
 			tagName: tag,
@@ -112,6 +113,7 @@ var Place = function(location){
 			}
 		});
 		feed.run();
+        console.log(feed);
 	};
     
     function markerClick(){
@@ -121,6 +123,7 @@ var Place = function(location){
 				self.marker.setAnimation(null);
 				self.marker.setIcon(null);
 			}, 1400);
+        vm.clearInstaDiv();
         self.tagFeed(self.tag);
         vm.updateWiki(self.wiki);
     }
@@ -166,6 +169,7 @@ function ViewModel(){
 	this.wikiInfo = ko.observable();
     
     this.instaErrorText = ko.observable();
+    this.instaDiv = ko.observable();
 
 	map = new google.maps.Map(document.getElementById('map'), {
 		zoom: 14,
@@ -184,7 +188,14 @@ function ViewModel(){
     
     this.updateWiki = function(wikiData){
         self.wikiInfo(wikiData);
-        console.log(wikiData);
+    }
+    
+    this.createInstaDiv = function(){
+        self.instaDiv('<div id="instafeed"></div>');
+    }
+    
+    this.clearInstaDiv = function(){
+        self.instaDiv('');
     }
 
 	this.searchQuery = ko.computed(function(){
