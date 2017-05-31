@@ -53,6 +53,7 @@ var locations = [
 ];
 
 var map;
+var vm;
 
 /* PLACE OBJECT */
 var Place = function(location){
@@ -86,6 +87,8 @@ var Place = function(location){
 	}, this);
 
 	var click = false;
+    
+    wikiRequest(self.title);
 
 	this.marker.addListener('click', function(){
         markerClick();
@@ -105,7 +108,7 @@ var Place = function(location){
 			limit: '21',
 			error: function(){
 				console.log("Instagram error");
-				self.instaErrorText = "There seems to be something wrong with Instagram right now.";
+				instaErrorText("There seems to be something wrong with Instagram right now.");
 			}
 		});
 		feed.run();
@@ -119,6 +122,7 @@ var Place = function(location){
 				self.marker.setIcon(null);
 			}, 1400);
         self.tagFeed(self.tag);
+        vm.updateWiki(self.wiki);
     }
     
     /* WIKIPEDIA */
@@ -148,8 +152,6 @@ var Place = function(location){
 
         request();
     }//end wiki request
-    
-    wikiRequest(self.title);
 };
 
 /* VIEW MODEL*/
@@ -177,9 +179,13 @@ function ViewModel(){
 	self.titleClick = function(data){
 		var context = ko.contextFor(event.target);
 		google.maps.event.trigger(data.marker, 'click');
-        self.wikiInfo(data.wiki);
         self.instaErrorText(data.instaErrorText);
 	}
+    
+    this.updateWiki = function(wikiData){
+        self.wikiInfo(wikiData);
+        console.log(wikiData);
+    }
 
 	this.searchQuery = ko.computed(function(){
 		var searchFilter = self.searchParam().toLowerCase();
@@ -211,5 +217,6 @@ function mapErrorHandling(){
 
 //call a new view model and apply it using ko
 function initialize(){
-	ko.applyBindings(new ViewModel());
+    vm = new ViewModel();
+	ko.applyBindings(vm);
 }
