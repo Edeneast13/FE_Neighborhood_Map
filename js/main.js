@@ -109,7 +109,7 @@ var Place = function(location){
 			limit: '21',
 			error: function(){
 				console.log("Instagram error");
-				instaErrorText("There seems to be something wrong with Instagram right now.");
+				vm.instaError();
 			}
 		});
 		feed.run();
@@ -196,6 +196,10 @@ function ViewModel(){
     
     this.clearInstaDiv = function(){
         self.instaDiv('');
+    }
+    
+    this.instaError = function(){
+        self.instaErrorText("There seems to be something wrong with Instagram right now.");
     }
 
 	this.searchQuery = ko.computed(function(){
